@@ -1,10 +1,21 @@
 <template>
   <div class="card">
+    <div
+      :style="routeColor"
+      class="routeColor"
+    ></div>
     <div class="top-row">
-      <h1 class="title">This is a Test Route name</h1>
-      <H2>OTHER</H2>
+      <h2 class="title">{{ displayName }}</h2>
+      <h2>{{ data.Grade }}</h2>
     </div>
-    {{ msg }}
+    <div class="bottom-row">
+      <span >
+        {{ setter }}
+      </span>
+      <span>
+        {{ date }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -12,7 +23,23 @@
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    data: Object
+  },
+  computed: {
+    displayName() {
+      return this.data.Name ? this.data.Name : `Route #${this.data.index}`;
+    },
+    setter() {
+      return this.data.Setter ? `Set by: ${this.data.Setter}` : '';
+    },
+    date() {
+      return this.data.Date ? `Date set: ${this.data.Date}` : '';
+    },
+    routeColor() {
+      return {
+        'background-color': this.data.Color
+      }
+    }
   }
 }
 </script>
@@ -22,8 +49,9 @@ export default {
 .card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  padding: 20px;
-  border-radius: 15px;
+  border-radius: 8px;
+  width: 90%;
+  margin: 15px;
 }
 
 .card:hover {
@@ -34,6 +62,15 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.275);
+  padding: 20px;
+}
+
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
 }
 
 .title {
@@ -41,13 +78,21 @@ export default {
   word-wrap:break-word;
 }
 
-h1, h2 {
-  margin-top: 0px;
+.setter {
+  justify-self: flex-start;
 }
 
-h2 {
-  padding: 10px, 20px;
-  border-radius: 15px;
-  background-color: yellow;
+.date {
+  justify-self: flex-end;
+}
+
+.routeColor {
+  padding: 15px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+h1, h2, h3 {
+  margin: 0px;
 }
 </style>
