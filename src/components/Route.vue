@@ -1,6 +1,7 @@
 <template>
-  <div class="card">
-    <div
+  <div class="grid-item">
+    <div class="card-flex">
+      <div
       :style="routeColor"
       class="routeColor"
     ></div>
@@ -15,6 +16,7 @@
       <span>
         {{ date }}
       </span>
+    </div>
     </div>
   </div>
 </template>
@@ -46,12 +48,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.card {
+.grid-item {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 8px;
-  width: 90%;
+  width: 315px;
   margin: 15px;
+  display: inline-block;
+  flex-basis: 20%;
+  -ms-flex: auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.card-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .card:hover {
@@ -62,7 +76,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.275);
   padding: 20px;
 }
 
@@ -71,6 +84,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.275);
 }
 
 .title {
@@ -94,5 +109,26 @@ export default {
 
 h1, h2, h3 {
   margin: 0px;
+}
+
+@media(max-width: 1333px) {
+  .grid-item {
+    flex-basis: 33.33%;
+  }
+}
+@media(max-width: 1073px) {
+   .grid-item {
+    flex-basis: 33.33%;
+  }
+}
+@media(max-width: 815px) {
+  .grid-item {
+    flex-basis: 50%;
+  }
+}
+@media(max-width: 555px) {
+  .grid-item {
+    flex-basis: 100%;
+  }
 }
 </style>
