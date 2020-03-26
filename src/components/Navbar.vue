@@ -2,7 +2,7 @@
   <div class="nav">
       <h1>CLIMBER CROWD</h1>
       <div class="menu">
-          <router-link to="/announcements" class="link">Announcements</router-link>
+          <router-link to="/" class="link">Announcements</router-link>
           <router-link to="/routes" class="link">Routes</router-link>
           <router-link to="/" class="link">Community</router-link>
           <router-link to="/" class="link">Feedback</router-link>

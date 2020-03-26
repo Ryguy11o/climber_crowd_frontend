@@ -1,6 +1,8 @@
 <template>
   <div class="RoutePage">
-    <h1>Bouldering</h1>
+    <h1
+        class="title"
+    >Bouldering</h1>
     <div 
         v-if="boulderingRoutes !== null"
     >
@@ -10,23 +12,35 @@
         >
             <h1
                 class="grade"
+                @click="expandMenu(key)"
             >
                 <span>
                     {{ key }}
                 </span>
-                <span>
-                    {{ `${value.length} Routes`}}
+                <span class="number-routes-container">
+                    <span
+                        class="number-routes"
+                    >
+                        {{ `${value.length} Routes`}}
+                    </span>
+                    <img
+                        src="../assets/down_arrow.png"
+                        :class="flipArrow(key)"
+                    />
                 </span>
             </h1>
-            <div
-                class="row"
-            >
-                <route
-                v-for="route in value"
-                :key="route.fields.ID"
-                :data="route.fields"
-                />
-            </div>
+            <transition name="slide">
+                <div
+                    v-if="expandedGrades[key]"
+                    class="row"
+                >
+                    <route
+                    v-for="route in value"
+                    :key="route.fields.ID"
+                    :data="route.fields"
+                    />
+                </div>
+            </transition>
         </div>
     </div>
   </div>
@@ -44,6 +58,7 @@ export default {
   data() {
     return {
       boulderingRoutes: [],
+      expandedGrades: {},
     }
   },
   computed: {
@@ -51,14 +66,16 @@ export default {
           const routesByGrade = {};
           this.boulderingRoutes.forEach(route => {
               if (routesByGrade[route.fields.Grade] !== undefined) {
-                  console.log(routesByGrade[route.fields.Grade]);
                   routesByGrade[route.fields.Grade].push(route);
               } else {
                   routesByGrade[route.fields.Grade] = [route];
               }
+
+              if (this.expandedGrades[route.fields.Grade] === undefined) {
+                  this.$set(this.expandedGrades, route.fields.Grade, false);
+              }
           });
 
-          console.log(routesByGrade);
           return routesByGrade;
       },
   },
@@ -68,9 +85,18 @@ export default {
       .get(`${process.env.VUE_APP_BASE_URL}/api/routes`)
       .then(response => {
         this.boulderingRoutes = response.data;
-        console.log(this.boulderingRoutesByGrade);
       });
     },
+    expandMenu(key) {
+        this.$set(this.expandedGrades, key, !this.expandedGrades[key]);
+    },
+    flipArrow(key) {
+        let className = 'arrow_down';
+        if (this.expandedGrades[key]) {
+            className = 'arrow_up';
+        }
+        return className;
+    }
   },
   mounted() {
       this.fetchBoulderingRoutes();
@@ -82,7 +108,6 @@ export default {
 .RoutePage {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   margin: 0 5%;
   font-family: 'Roboto Condensed', sans-serif;
@@ -92,6 +117,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  transform-origin: top;
 }
 
 .grade {
@@ -106,5 +132,37 @@ export default {
     align-items: center;
     justify-content: space-between;
     border-radius: 4px;
+    cursor: pointer;
+}
+
+.arrow_down {
+    width: 25px;
+    padding-top: 5px;
+    transition: .3s;
+}
+
+.arrow_up {
+    width: 25px;
+    padding-top: 0px;
+    transform: rotate(180deg);
+    transition: .3s;
+}
+
+.number-routes {
+    margin-right: 10px;
+}
+
+.number-routes-container {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    align-self: center;
+}
+
+.slide-enter, .slide-leave-to{
+  height: 0;
+  opacity: 0;
 }
 </style>

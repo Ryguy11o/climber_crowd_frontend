@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/routes', component: RoutePage },
-  { path: '/announcements', component: AnnouncementPage },
+  { path: '/', component: AnnouncementPage },
 ]
 
 // 3. Create the router instance and pass the `routes` option
