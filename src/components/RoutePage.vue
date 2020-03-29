@@ -1,11 +1,11 @@
 <template>
   <div class="RoutePage">
     <h1
+        @click="expandBouldering()"
         class="title"
     >
         <div 
             class="layer"
-            @click="expandBouldering()"
         >
             Bouldering
         </div>
@@ -171,13 +171,13 @@ export default {
 }
 
 .arrow_down {
-    width: 25px;
+    width: 20px;
     padding-top: 5px;
     transition: .3s;
 }
 
 .arrow_up {
-    width: 25px;
+    width: 20px;
     padding-top: 0px;
     transform: rotate(180deg);
     transition: .3s;
@@ -185,6 +185,8 @@ export default {
 
 .number-routes {
     margin-right: 10px;
+    font-weight: 400;
+    font-size: .66em;
 }
 
 .number-routes-container {

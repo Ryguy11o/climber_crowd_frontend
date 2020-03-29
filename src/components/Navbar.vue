@@ -4,11 +4,12 @@
         <span class="title-span">
           <h1>Climber Crowd</h1>
         </span >
-        <i
+        <img
             v-if="mobile"
             @click="toggleMenu"
-            class="menu-icon gg-menu">
-        </i>
+            src="../assets/menu_icon.svg"
+            class="menu-icon"
+        />
       </div>
       <div 
         class="menu"
@@ -77,21 +78,20 @@ export default {
     justify-self: center;
     margin-left: auto;
 }
-.gg-menu {
-    --ggs: 1.5;
-    transition: transform .2s linear;
-}
 
-.gg-menu:hover {
-    --ggs: 1.6;
+.menu-icon:hover {
+    transform: scale(1.1);
     cursor: pointer;
 }
 
 .menu-icon {
     display: block;
     margin-left: auto;
+    width: 30px;
     margin-right: 5%;
-    margin-top: 5px;
+    margin-top: 2px;
+    padding: 10px 0;
+    transition: transform .2s linear;
 }
 .nav {
     height: 135px;
