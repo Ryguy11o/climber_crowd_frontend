@@ -45,8 +45,14 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 5%;
+  margin: 0 20%;
   font-family: 'Roboto Condensed', sans-serif;
   text-align: center;
+}
+
+@media only screen and (max-width: 850px) {
+  .AnnouncementPage {
+    margin: 0 5%;
+  }
 }
 </style>

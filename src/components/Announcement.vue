@@ -23,11 +23,16 @@ export default {
 <style scoped>
     .announcement {
         padding-bottom: 15px;
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid rgba(0,0,0, 0.4);
     }
 
     .announcement:last-child {
         border-bottom: none;
+    }
+
+    p {
+        text-align: start;
+        padding: 0px 10%;
     }
 
     h3 {

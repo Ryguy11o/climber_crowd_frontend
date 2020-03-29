@@ -2,47 +2,57 @@
   <div class="RoutePage">
     <h1
         class="title"
-    >Bouldering</h1>
-    <div 
-        v-if="boulderingRoutes !== null"
     >
-        <div
-            v-for="[key, value] of Object.entries(boulderingRoutesByGrade)"
-            :key="key"
+        <div 
+            class="layer"
+            @click="expandBouldering()"
         >
-            <h1
-                class="grade"
-                @click="expandMenu(key)"
-            >
-                <span>
-                    {{ key }}
-                </span>
-                <span class="number-routes-container">
-                    <span
-                        class="number-routes"
-                    >
-                        {{ `${value.length} Routes`}}
-                    </span>
-                    <img
-                        src="../assets/down_arrow.png"
-                        :class="flipArrow(key)"
-                    />
-                </span>
-            </h1>
-            <transition name="slide">
-                <div
-                    v-if="expandedGrades[key]"
-                    class="row"
-                >
-                    <route
-                    v-for="route in value"
-                    :key="route.fields.ID"
-                    :data="route.fields"
-                    />
-                </div>
-            </transition>
+            Bouldering
         </div>
-    </div>
+    </h1>
+    <transition name="slide">
+        <div 
+            v-if="boulderingRoutes !== null && boulderingExpanded === true"
+        >
+            <div
+                v-for="[key, value] of Object.entries(boulderingRoutesByGrade)"
+                :key="key"
+            >
+                <h1
+                    class="grade"
+                    :class="selectedGrade(key)"
+                    @click="expandMenu(key)"
+                >
+                    <span>
+                        {{ key }}
+                    </span>
+                    <span class="number-routes-container">
+                        <span
+                            class="number-routes"
+                        >
+                            {{ `${value.length} Routes`}}
+                        </span>
+                        <img
+                            src="../assets/down_arrow_black.png"
+                            :class="flipArrow(key)"
+                        />
+                    </span>
+                </h1>
+                <transition name="slide">
+                    <div
+                        v-if="expandedGrades[key]"
+                        class="row"
+                    >
+                        <route
+                        v-for="route in value"
+                        :key="route.fields.ID"
+                        :data="route.fields"
+                        />
+                    </div>
+                </transition>
+            </div>
+        </div>
+    </transition>
   </div>
 </template>
 
@@ -59,6 +69,7 @@ export default {
     return {
       boulderingRoutes: [],
       expandedGrades: {},
+      boulderingExpanded: false,
     }
   },
   computed: {
@@ -96,6 +107,17 @@ export default {
             className = 'arrow_up';
         }
         return className;
+    },
+    selectedGrade(key) {
+        let className = 'grade-unselected';
+        if (this.expandedGrades[key]) {
+            className = 'grade-selected';
+        }
+        return className;
+    },
+    expandBouldering() {
+        const bool =this.boulderingExpanded
+        this.boulderingExpanded = !bool;
     }
   },
   mounted() {
@@ -104,7 +126,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .RoutePage {
   display: flex;
   flex-direction: column;
@@ -121,18 +143,31 @@ export default {
 }
 
 .grade {
-    background: linear-gradient(90deg, 
-    rgba(230,0,118,1) 0%, 
-    rgba(204,6,131,1) 29%,
-    rgba(233,122,55,1) 67%, 
-    rgba(255,173,0,1) 100%);
-    color: white;
+    color: black;
     padding: 5px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 4px;
     cursor: pointer;
+    transition: transform .2s linear;
+}
+
+.grade-unselected {
+    border-bottom: solid 2px rgba(0,0,0,.1);
+}
+
+.grade-selected {
+    background-color: rgba(0,0,0,.1);
+    border-radius: 4px;
+}
+
+.grade:hover {
+    cursor: pointer;
+    background-color: rgba(0,0,0,.1);
+    border-radius: 4px;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.15);
+    border: none;
 }
 
 .arrow_down {
@@ -159,6 +194,22 @@ export default {
 
 .title {
     align-self: center;
+    padding: 1em 0;
+    margin: .67em auto auto auto;
+    background-image: url('../assets/bouldering.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 30%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    border-radius: 4px;
+}
+
+.title:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.15);
 }
 
 .slide-enter, .slide-leave-to{
