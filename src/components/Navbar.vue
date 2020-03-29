@@ -2,8 +2,14 @@
   <div class="nav">
       <h1>CLIMBER CROWD</h1>
       <div class="menu">
-          <router-link to="/" class="link">Announcements</router-link>
-          <router-link to="/routes" class="link">Routes</router-link>
+          <router-link to="/" class="link">
+            <span>Announcements</span>
+            <i class="gg-feed"></i>
+          </router-link>
+          <router-link to="/routes" class="link">
+            <span>Routes</span>
+            <i class="gg-git-fork"></i>
+          </router-link>
           <router-link to="/" class="link">Community</router-link>
           <router-link to="/" class="link">Feedback</router-link>
       </div>
@@ -54,6 +60,14 @@ export default {
     justify-content: center;
     text-decoration: none;
     color: white;
+}
+
+.link span, .link a {
+    margin: 0 10px;
+}
+
+.gg-feed, .gg-git-fork {
+    --ggs: .75;
 }
 
 .link:hover {
