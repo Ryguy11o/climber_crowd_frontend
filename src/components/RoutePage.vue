@@ -1,8 +1,9 @@
 <template>
   <div class="RoutePage">
+    <!-- Bouldering Section -->
     <h1
         @click="expandBouldering()"
-        class="title"
+        class="title bouldering"
     >
         <div 
             class="layer"
@@ -14,8 +15,120 @@
         <div 
             v-if="boulderingRoutes !== null && boulderingExpanded === true"
         >
+            <p class="difficulty">Scale: Beginner V0 - V2, Intermediate V3 - V5, Advanced V5+</p>
             <div
                 v-for="[key, value] of Object.entries(boulderingRoutesByGrade)"
+                :key="key"
+            >
+                <h1
+                    class="grade"
+                    :class="selectedGrade(key)"
+                    @click="expandMenu(key)"
+                >
+                    <span>
+                        {{ key }}
+                    </span>
+                    <span class="number-routes-container">
+                        <span
+                            class="number-routes"
+                        >
+                            {{ `${value.length} Routes`}}
+                        </span>
+                        <img
+                            src="../assets/down_arrow_black.png"
+                            :class="flipArrow(key)"
+                        />
+                    </span>
+                </h1>
+                <transition name="slide">
+                    <div
+                        v-if="expandedGrades[key]"
+                        class="row"
+                    >
+                        <route
+                        v-for="route in value"
+                        :key="route.fields.ID"
+                        :data="route.fields"
+                        />
+                    </div>
+                </transition>
+            </div>
+        </div>
+    </transition>
+    <!-- Top Rope Section -->
+        <h1
+        @click="expandTopRope()"
+        class="title top-rope"
+    >
+        <div 
+            class="layer"
+        >
+            Top Roping
+        </div>
+    </h1>
+    <transition name="slide">
+        <div 
+            v-if="topRopeRoutes !== null && topRopeExpanded === true"
+        >
+            <p class="difficulty">Scale: Beginner 5.5 - 5.7, Intermediate 5.8 - 5.10, Advanced 5.10+</p>
+            <div
+                v-for="[key, value] of Object.entries(TopRoutesByGrade)"
+                :key="key"
+            >
+                <h1
+                    class="grade"
+                    :class="selectedGrade(key)"
+                    @click="expandMenu(key)"
+                >
+                    <span>
+                        {{ key }}
+                    </span>
+                    <span class="number-routes-container">
+                        <span
+                            class="number-routes"
+                        >
+                            {{ `${value.length} Routes`}}
+                        </span>
+                        <img
+                            src="../assets/down_arrow_black.png"
+                            :class="flipArrow(key)"
+                        />
+                    </span>
+                </h1>
+                <transition name="slide">
+                    <div
+                        v-if="expandedGrades[key]"
+                        class="row"
+                    >
+                        <route
+                        v-for="route in value"
+                        :key="route.fields.ID"
+                        :data="route.fields"
+                        />
+                    </div>
+                </transition>
+            </div>
+        </div>
+    </transition>
+    <!-- Lead Section -->
+    <h1
+        @click="expandLead()"
+        class="title lead"
+    >
+        <div 
+            class="layer"
+        >
+            Sport Climbing
+        </div>
+    </h1>
+    <transition name="slide">
+        <div 
+            v-if="leadRoutes !== null && leadExpanded === true"
+        >
+            <p class="warning">Warning sport climbing involves more risk - Intermediate and Advanced Climbers only.</p>
+            <p class="difficulty">Scale: Beginner 5.5 - 5.7, Intermediate 5.8 - 5.10, Advanced 5.10+</p>
+            <div
+                v-for="[key, value] of Object.entries(leadByGrade)"
                 :key="key"
             >
                 <h1
@@ -68,8 +181,12 @@ export default {
   data() {
     return {
       boulderingRoutes: [],
+      topRopeRoutes: [],
+      leadRoutes: [],
       expandedGrades: {},
       boulderingExpanded: false,
+      topRopeExpanded: false,
+      leadExpanded: false,
     }
   },
   computed: {
@@ -89,13 +206,59 @@ export default {
 
           return routesByGrade;
       },
+      TopRoutesByGrade() {
+          const routesByGrade = {};
+          this.topRopeRoutes.forEach(route => {
+              if (routesByGrade[route.fields.Grade] !== undefined) {
+                  routesByGrade[route.fields.Grade].push(route);
+              } else {
+                  routesByGrade[route.fields.Grade] = [route];
+              }
+
+              if (this.expandedGrades[route.fields.Grade] === undefined) {
+                  this.$set(this.expandedGrades, route.fields.Grade, false);
+              }
+          });
+
+          return routesByGrade;
+      },
+      leadByGrade() {
+          const routesByGrade = {};
+          this.leadRoutes.forEach(route => {
+              if (routesByGrade[route.fields.Grade] !== undefined) {
+                  routesByGrade[route.fields.Grade].push(route);
+              } else {
+                  routesByGrade[route.fields.Grade] = [route];
+              }
+
+              if (this.expandedGrades[route.fields.Grade] === undefined) {
+                  this.$set(this.expandedGrades, route.fields.Grade, false);
+              }
+          });
+
+          return routesByGrade;
+      },
   },
   methods: {
     fetchBoulderingRoutes() {
       axios
-      .get(`${process.env.VUE_APP_BASE_URL}/api/routes`)
+      .get(`${process.env.VUE_APP_BASE_URL}/api/bouldering`)
       .then(response => {
         this.boulderingRoutes = response.data;
+      });
+    },
+    fetchTopRopeRoutes() {
+      axios
+      .get(`${process.env.VUE_APP_BASE_URL}/api/wall/top-roping`)
+      .then(response => {
+        this.topRopeRoutes = response.data;
+      });
+    },
+    fetchLeadRoutes() {
+      axios
+      .get(`${process.env.VUE_APP_BASE_URL}/api/wall/lead`)
+      .then(response => {
+        this.leadRoutes = response.data;
       });
     },
     expandMenu(key) {
@@ -116,12 +279,24 @@ export default {
         return className;
     },
     expandBouldering() {
-        const bool =this.boulderingExpanded
+        const bool = this.boulderingExpanded;
         this.boulderingExpanded = !bool;
+    },
+    expandTopRope() {
+        const bool = this.topRopeExpanded;
+        this.topRopeExpanded = !bool;
+    },
+    expandLead() {
+        const bool = this.leadExpanded;
+        this.leadExpanded = !bool;
     }
   },
   mounted() {
-      this.fetchBoulderingRoutes();
+      Promise.all([
+          this.fetchBoulderingRoutes(),
+          this.fetchTopRopeRoutes(),
+          this.fetchLeadRoutes(),
+      ]);
   }
 }
 </script>
@@ -133,6 +308,16 @@ export default {
   justify-content: center;
   margin: 0 5%;
   font-family: 'Roboto Condensed', sans-serif;
+}
+
+.difficulty {
+    color: rgba(0,0,0,.7);
+    text-align: center;
+}
+
+.warning {
+    color: #ffae42;
+    text-align: center;
 }
 
 .row {
@@ -196,9 +381,8 @@ export default {
 
 .title {
     align-self: center;
-    padding: 1em 0;
+    padding: 2em 0;
     margin: .67em auto auto auto;
-    background-image: url('../assets/bouldering.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 30%;
@@ -206,6 +390,18 @@ export default {
     text-align: center;
     color: white;
     border-radius: 4px;
+}
+
+.bouldering {
+    background-image: url('../assets/bouldering.jpg');
+}
+
+.top-rope {
+    background-image: url('../assets/top-rope.jpg');
+}
+
+.lead {
+    background-image: url('../assets/lead.jpg');
 }
 
 .title:hover {

@@ -2,6 +2,7 @@
   <div class="grid-item">
     <div class="card-flex">
       <div
+      v-if="data.Color !== undefined"
       :style="routeColor"
       class="routeColor"
     ></div>
@@ -23,7 +24,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Route',
   props: {
     data: Object
   },
@@ -38,9 +39,9 @@ export default {
       return this.data.Date ? `Date set: ${this.data.Date}` : '';
     },
     routeColor() {
-      return {
+      return this.data.Color ? {
         'background-color': this.data.Color
-      }
+      } : {};
     }
   }
 }
