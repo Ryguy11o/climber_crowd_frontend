@@ -125,7 +125,7 @@
         <div 
             v-if="leadRoutes !== null && leadExpanded === true"
         >
-            <p class="warning">Warning sport climbing involves more risk - Intermediate and Advanced Climbers only.</p>
+            <p class="warning">Warning: Sport climbing involves more risk - Intermediate and Advanced Climbers only.</p>
             <p class="difficulty">Scale: Beginner 5.5 - 5.7, Intermediate 5.8 - 5.10, Advanced 5.10+</p>
             <div
                 v-for="[key, value] of Object.entries(leadByGrade)"
@@ -382,7 +382,7 @@ export default {
 .title {
     align-self: center;
     padding: 2em 0;
-    margin: .67em auto auto auto;
+    margin: .33em auto;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 30%;

@@ -106,6 +106,7 @@ export default {
     rgba(233,122,55,1) 67%, 
     rgba(255,173,0,1) 100%);
     color: white;
+    margin-bottom: 1.5em;
 }
 
 .menu {

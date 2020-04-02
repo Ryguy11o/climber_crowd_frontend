@@ -6,9 +6,23 @@
       :style="routeColor"
       class="routeColor"
     ></div>
-    <div class="top-row">
-      <h2 class="title">{{ displayName }}</h2>
-      <h2>{{ data.Grade }}</h2>
+    <div class="card-top">
+      <div class="title-row">
+        <h2 class="title">{{ displayName }}</h2>
+        <h2>{{ data.Grade }}</h2>
+      </div>
+      <div
+        class="review"
+      >
+        <span class="stars"></span>
+        <span 
+          @click="openModal()"
+          class="review-button"
+        >
+          Rate this route
+          <i class="gg-smile"></i>
+        </span>
+      </div>
     </div>
     <div class="bottom-row">
       <span >
@@ -19,12 +33,28 @@
       </span>
     </div>
     </div>
+    <Modal
+      v-if="showModal"
+      @close="showModal = !showModal"
+      :routeName="displayName"
+      :routeData="data"
+    />
   </div>
 </template>
 
 <script>
+import Modal from './Modal'
+import axios from 'axios';
 export default {
   name: 'Route',
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      showModal: false,
+    }
+  },
   props: {
     data: Object
   },
@@ -42,6 +72,24 @@ export default {
       return this.data.Color ? {
         'background-color': this.data.Color
       } : {};
+    }
+  },
+  methods: {
+    postReview() {
+      axios.post(`${process.env.VUE_APP_BASE_URL}/api/reviews`, {
+        Route: this.data.ID,
+        Feedback: 'Test',
+        Rating: 3,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    openModal() {
+      this.showModal = true;
     }
   }
 }
@@ -62,6 +110,28 @@ export default {
   box-sizing: border-box;
 }
 
+.review {
+  padding: 0 20px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-button:hover {
+  cursor: pointer;
+  color:rgba(2, 118, 253, 1);
+}
+
+.review-button {
+  padding: 5px 0;
+  color: rgba(2, 118, 253, .8);
+  display: flex;
+  justify-content: space-between;
+}
+
+.gg-smile {
+  margin-left: 5px;
+}
 .card-flex {
   display: flex;
   flex-direction: column;
@@ -69,15 +139,26 @@ export default {
   height: 100%;
 }
 
+.stars {
+  width: 80px;
+  height: 20px;
+  background-color: rgba(255,173,0,1);
+}
+
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.top-row {
+.title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 20px 5px 20px;
+}
+
+.card-top {
+  display: flex;
+  flex-direction: column;
 }
 
 .bottom-row {
@@ -86,7 +167,8 @@ export default {
   align-items: center;
   padding: 20px;
   margin-top: auto;
-  border-top: 1px solid rgba(0, 0, 0, 0.275);
+  background-color:rgba(0, 0, 0, 0.05);
+  color: rgba(0,0,0,.6);
 }
 
 .title {
