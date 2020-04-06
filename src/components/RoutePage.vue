@@ -183,6 +183,7 @@ export default {
       boulderingRoutes: [],
       topRopeRoutes: [],
       leadRoutes: [],
+      reviews: [],
       expandedGrades: {},
       boulderingExpanded: false,
       topRopeExpanded: false,
@@ -192,7 +193,16 @@ export default {
   computed: {
       boulderingRoutesByGrade() {
           const routesByGrade = {};
+          let reviewsObj = this.reviewsToRoute;
           this.boulderingRoutes.forEach(route => {
+              const ratings = reviewsObj[route.fields.ID];
+
+              if (ratings !== undefined) {
+                  route.fields.ratings = ratings;
+              } else {
+                  route.fields.ratings = [];
+              }
+
               if (routesByGrade[route.fields.Grade] !== undefined) {
                   routesByGrade[route.fields.Grade].push(route);
               } else {
@@ -209,6 +219,13 @@ export default {
       TopRoutesByGrade() {
           const routesByGrade = {};
           this.topRopeRoutes.forEach(route => {
+              const ratings = this.reviewsToRoute[route.fields.ID];
+              if (ratings !== undefined) {
+                  route.fields.ratings = ratings;
+              } else {
+                  route.fields.ratings = [];
+              }
+
               if (routesByGrade[route.fields.Grade] !== undefined) {
                   routesByGrade[route.fields.Grade].push(route);
               } else {
@@ -225,6 +242,13 @@ export default {
       leadByGrade() {
           const routesByGrade = {};
           this.leadRoutes.forEach(route => {
+              const ratings = this.reviewsToRoute[route.fields.ID];
+              if (ratings !== undefined) {
+                  route.fields.ratings = ratings;
+              } else {
+                  route.fields.ratings = [];
+              }
+
               if (routesByGrade[route.fields.Grade] !== undefined) {
                   routesByGrade[route.fields.Grade].push(route);
               } else {
@@ -238,6 +262,20 @@ export default {
 
           return routesByGrade;
       },
+      reviewsToRoute() {
+          const aggregatedReviews = {};
+
+          this.reviews.forEach(review => {
+              let id = review.fields.ID.trim();
+              if(!aggregatedReviews[id]) {
+                  aggregatedReviews[id] = [review.fields.Rating];
+              } else {
+                  aggregatedReviews[id].push(review.fields.Rating);
+              }
+          });
+
+          return aggregatedReviews;
+      }
   },
   methods: {
     fetchBoulderingRoutes() {
@@ -259,6 +297,13 @@ export default {
       .get(`${process.env.VUE_APP_BASE_URL}/api/wall/lead`)
       .then(response => {
         this.leadRoutes = response.data;
+      });
+    },
+    fetchReviews() {
+      axios
+      .get(`${process.env.VUE_APP_BASE_URL}/api/reviews`)
+      .then(response => {
+        this.reviews = response.data;
       });
     },
     expandMenu(key) {
@@ -296,6 +341,7 @@ export default {
           this.fetchBoulderingRoutes(),
           this.fetchTopRopeRoutes(),
           this.fetchLeadRoutes(),
+          this.fetchReviews(),
       ]);
   }
 }

@@ -14,7 +14,7 @@
       <div
         class="review"
       >
-        <span class="stars"></span>
+        <stars :numberStars="ratingAverage" :numberRatings="data.ratings.length"/>
         <span 
           @click="openModal()"
           class="review-button"
@@ -43,12 +43,13 @@
 </template>
 
 <script>
-import Modal from './Modal'
-import axios from 'axios';
+import Modal from './Modal';
+import Stars from './Stars';
 export default {
   name: 'Route',
   components: {
     Modal,
+    Stars,
   },
   data() {
     return {
@@ -72,26 +73,20 @@ export default {
       return this.data.Color ? {
         'background-color': this.data.Color
       } : {};
-    }
+    },
+    ratingAverage() {
+      if(this.data.ratings.length !== 0) {
+        return this.data.ratings.reduce((a,b) => a + b, 0) / this.data.ratings.length;
+      } else {
+        return -1;
+      }
+    },
   },
   methods: {
-    postReview() {
-      axios.post(`${process.env.VUE_APP_BASE_URL}/api/reviews`, {
-        Route: this.data.ID,
-        Feedback: 'Test',
-        Rating: 3,
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    },
     openModal() {
       this.showModal = true;
     }
-  }
+  },
 }
 </script>
 
@@ -137,12 +132,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   height: 100%;
-}
-
-.stars {
-  width: 80px;
-  height: 20px;
-  background-color: rgba(255,173,0,1);
 }
 
 .card:hover {
