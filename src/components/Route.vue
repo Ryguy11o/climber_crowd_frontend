@@ -106,7 +106,7 @@ export default {
 }
 
 .review {
-  padding: 0 20px 20px 20px;
+  padding: 0 15px 15px 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -142,7 +142,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 20px 5px 20px;
+  padding: 15px 15px 5px 15px;
 }
 
 .card-top {
