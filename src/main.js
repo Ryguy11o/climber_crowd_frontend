@@ -3,12 +3,14 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import RoutePage from './components/RoutePage.vue';
 import AnnouncementPage from './components/AnnouncementPage.vue';
+import FeedbackPage from './components/FeedbackPage.vue';
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: '/feedback', component: FeedbackPage},
   { path: '/routes', component: RoutePage },
   { path: '/', component: AnnouncementPage },
 ]

@@ -2,7 +2,9 @@
   <div class="nav">
       <div class="title">
         <span class="title-span">
-          <h1>Climber Crowd</h1>
+            <router-link class="title-link" to="/">
+                <h1>Climber Crowd</h1>
+            </router-link>
         </span >
         <img
             v-if="mobile"
@@ -23,8 +25,10 @@
             <span>Routes</span>
             <i class="gg-git-fork"></i>
           </router-link>
-          <router-link to="/" class="link">Community</router-link>
-          <router-link to="/" class="link">Feedback</router-link>
+          <router-link to="/feedback" class="link">
+            <span id="feedback">Feedback</span>
+            <i class="gg-clipboard"></i>
+           </router-link>
       </div>
   </div>
 </template>
@@ -120,10 +124,15 @@ export default {
 
 .link {
     height: 100%;
-    width: 25%;
+    width: 33%;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    color: white;
+}
+
+.title-link {
     text-decoration: none;
     color: white;
 }
@@ -132,7 +141,11 @@ export default {
     margin: 0 10px;
 }
 
-.gg-feed, .gg-git-fork {
+#feedback {
+    margin-right: 2px;
+}
+
+.gg-feed, .gg-git-fork, .gg-clipboard {
     --ggs: .75;
 }
 

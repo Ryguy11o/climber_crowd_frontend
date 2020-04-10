@@ -154,7 +154,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   margin-top: auto;
   background-color:rgba(0, 0, 0, 0.05);
   color: rgba(0,0,0,.6);
